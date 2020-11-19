@@ -1,0 +1,181 @@
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4 text-center">Flat Register</h1>
+        <hr>
+        <div class="row">
+            
+            <div class="col-md-12">
+
+
+<div class="border">
+  
+    <div *ngIf="service.houseIdList.length; else loading" class="container">
+      <label for="HouseId">Required House Street : </label>
+      <select [(ngModel)]="hSelected" >       
+        <option [ngValue]="undefined" class="holder" disabled>
+          Select your option {{hSelected}}
+        </option>
+        <option *ngFor="let house of service.houseIdList" [value]="+house.HId" >
+          {{house.HouseStreet}}
+      
+        </option> 
+      </select>
+      <button class="btn btn-sm btn btn-dark" [routerLink]="['/flats', hSelected]" (click)="getFlatList(hSelected);  ">
+      <i class="fas fa-house-user"></i>Flats</button>
+      <button class="btn btn-md btn-outline-primary" (click)="open(content); resetForm();">
+        <i class="fa fa-user" ></i>New Flat</button>
+    </div>
+    
+  </div>
+  
+
+
+
+
+<div class="container">
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>Number</th>
+      <th>Floor</th>
+      <th>Rooms</th>
+      <th>Full Area</th>
+      <th>Living Space</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let formFlat of service.listForHouseFlats">
+      <td (click)="populateForm(formFlat); open(content);">{{formFlat.FlatNumber}}</td>
+      <td (click)="populateForm(formFlat); open(content);">{{formFlat.FlatFloor}}</td>
+      <td (click)="populateForm(formFlat); open(content);">{{formFlat.FlatRoomsAmmount}}</td>
+      <td (click)="populateForm(formFlat); open(content);">{{formFlat.FlatFullArea}}</td>
+      <td (click)="populateForm(formFlat); open(content);">{{formFlat.FlatLivingSpaceArea}}</td>
+      <td>
+          
+          <button class="btn btn-sm btn-warning" (click)="open(content); populateForm(formFlat);" >
+            <i class="fa fa-edit"></i>Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="onDelete(formFlat.FlatId)">
+            <i class="fa fa-remove"></i>Delete</button>       
+        </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="container">
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>House Id</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let house of service.houseIdList">
+      <td>{{house.HId}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New Flat</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #formFlat="ngForm" (ngSubmit)="onSubmit(formFlat)" novalidate>
+      <input type="hidden" name="FlatId" [value]="service.formData.FlatId">
+      <div class="form-group">
+        <label for="FlatNumber">Flat Number</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text bg-white">
+                <i class="fas fa-sort-numeric-up-alt"  [class.green-icon]="FlatNumber.valid" [class.red-icon]="FlatNumber.invalid && FlatNumber.touched"></i>
+            </div>
+        </div>
+          <input type="number"  name="FlatNumber" #FlatNumber="ngModel" [(ngModel)]="service.formData.FlatNumber" class="form-control " placeholder="Flat Number" required>
+        </div>
+      </div>
+      <div class="form-group">
+          <label for="FlatFloor">Flat Floor</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text bg-white">
+                  <i class="fas fa-sort-numeric-up-alt" [class.green-icon]="FlatFloor.valid" [class.red-icon]="FlatFloor.invalid && FlatFloor.touched"></i>
+              </div>
+          </div>
+              <input  type="number" name="FlatFloor" #FlatFloor="ngModel" [(ngModel)]="service.formData.FlatFloor" class="form-control" placeholder="Flat Floor" required maxlength="16">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="FlatRoomsAmmount">Flat Rooms Ammount</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text bg-white">
+                  <i class="fas fa-sort-amount-up-alt" [class.green-icon]="FlatRoomsAmmount.valid" [class.red-icon]="FlatRoomsAmmount.invalid && FlatRoomsAmmount.touched"></i>
+              </div>
+          </div>
+              <input  type="number" name="FlatRoomsAmmount" #FlatRoomsAmmount="ngModel" [(ngModel)]="service.formData.FlatRoomsAmmount" class="form-control" placeholder="Flat Rooms Ammount" required maxlength="16">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="FlatFullArea">Flat Full area</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text bg-white">
+                  <i class="fas fa-clone" [class.green-icon]="FlatFullArea.valid" [class.red-icon]="FlatFullArea.invalid && FlatFullArea.touched"></i>
+              </div>
+          </div>
+              <input  type="number" name="FlatFullArea" #FlatFullArea="ngModel" [(ngModel)]="service.formData.FlatFullArea" class="form-control" placeholder="Flat Flull Area" required maxlength="10">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="FlatLivingSpaceArea">Flat Living Space Area</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text bg-white">
+                  <i class="far fa-clone"  [class.green-icon]="FlatLivingSpaceArea.valid" [class.red-icon]="FlatLivingSpaceArea.invalid && FlatLivingSpaceArea.touched"></i>
+              </div>
+          </div>
+              <input  type="number" name="FlatLivingSpaceArea" #FlatLivingSpaceArea="ngModel" [(ngModel)]="service.formData.FlatLivingSpaceArea" class="form-control" placeholder="Flat Living Space Area" required maxlength="10">
+          </div>
+        </div>
+       
+        <div class="form-group">
+          <label for="HouseId">Required House ID : </label>
+          <select class="browser-default custom-select"  name="HouseId" #HouseId="ngModel" [(ngModel)]="service.formData.HouseId" >       
+            <option selected="selected" class="holder" disabled>Select your option</option>
+            <option   *ngFor="let house of service.houseIdList" [value]="house.HId">
+              {{house.HouseStreet}}
+            </option>
+            </select>
+        </div>
+    </form>
+ 
+  </div>
+  <div class="border text-center">
+      <button data-dismiss="modal"  type="submit" class="btn btn-info" (click)="onSubmit(formFlat); getFlatList(service.formData.HouseId);">Submit</button>
+      </div>
+  <div class="modal-footer">
+    
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+<div class="spinner-border text-dark" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+</ng-template>
+
+</div>
+</div>
+</div>
+</div>

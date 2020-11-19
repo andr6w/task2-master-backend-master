@@ -1,0 +1,204 @@
+<div class="border">
+  <button class="btn btn-md btn-outline-primary" (click)="open(content); resetForm();">
+    <i class="fa fa-user"></i>New House
+  </button>
+
+
+</div>
+
+<div class="container">
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>HouseNumber</th>
+        <th>HouseCity</th>
+        <th>HouseCountry</th>
+        <th>HouseStreet</th>
+        <th>HousePostIndex</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let house of service.listForAllHouses">
+        <td (click)="populateForm(house); open(content);"><span>{{house.HouseNumber}}</span></td>
+        <td (click)="populateForm(house); open(content);"><span>{{house.HouseCity}}</span></td>
+        <td (click)="populateForm(house); open(content);"> <span>{{house.HouseCountry}}</span></td>
+        <td (click)="populateForm(house); open(content);"> <span>{{house.HouseStreet}}</span></td>
+        <td (click)="populateForm(house); open(content);"><span>{{house.HousePostIndex}}</span></td>
+        <td>
+          <button class="btn btn-sm btn-info" (click)="openDetails(contentDetails, house)">
+            <i class="fa fa-search"></i>Details</button>
+          <button class="btn btn-sm btn-warning" (click)="populateForm(house); open(content);">
+            <i class="fa fa-edit"></i>Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="onDelete(house.HId)">
+            <i class="fa fa-remove"></i>Delete</button>
+          <button class="btn btn-sm btn btn-dark" [routerLink]="['/flats', house.HId]">
+            <i class="fas fa-house-user"></i>Flats</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{test}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="houseReactiveForm" (ngSubmit)="onSubmitTest(houseReactiveForm)">
+      <input type="hidden" name="HId">
+      <div class="form-group">
+        <label for="HouseNumber">House Number</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text bg-white">
+              <i class="fas fa-sort-numeric-up-alt"></i>
+            </div>
+          </div>
+          <input type="number" name="HouseNumber" formControlName="HouseNumber" class="form-control "
+            placeholder="House Number" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="HouseCity">House City</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text bg-white">
+              <i class="fas fa-city"></i>
+            </div>
+          </div>
+          <input name="HouseCity" formControlName="HouseCity" class="form-control" placeholder="House City" required
+            maxlength="16">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="HouseStreet">House Street</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text bg-white">
+              <i class="fas fa-globe-europe"></i>
+            </div>
+          </div>
+          <input name="HouseStreet" formControlName="HouseStreet" class="form-control" placeholder="House Street"
+            required maxlength="16">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="HouseCountry">House Country</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text bg-white">
+              <i class="fas fa-globe-europe"></i>
+            </div>
+          </div>
+          <input name="HouseCountry" formControlName="HouseCountry" class="form-control" placeholder="House Country"
+            required maxlength="16">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="HousePostIndex">House Post Code</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text bg-white">
+              <i class="fas fa-mail-bulk"></i>
+            </div>
+          </div>
+          <input name="HousePostIndex" formControlName="HousePostIndex" class="form-control" placeholder="Post Index"
+            required maxlength="10">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="border text-center">
+    <button type="submit" class="btn btn-info" [disabled]="!houseReactiveForm.valid"
+      (click)="onSubmitTest(houseReactiveForm)">Submit</button>
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+  </div>
+</ng-template>
+
+<ng-template #contentDetails let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">House Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+      <input type="hidden" name="HId" [value]="service.formGroup.HId">
+      <div class="form-group">
+        <label for="HouseNumber">House Number</label>
+        <div class="input-group">
+          <input id="hNumber" class="form-control " placeholder="House Number" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="HouseCity">House City</label>
+        <div class="input-group">
+          <input id="hCity" class="form-control" placeholder="House City" required maxlength="16" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="HouseStreet">House Street</label>
+        <div class="input-group">
+          <input id="hStreet" class="form-control" placeholder="House Street" required maxlength="16" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="HouseCountry">House Country</label>
+        <div class="input-group">
+          <input id="hCountry" class="form-control" placeholder="House Country" required maxlength="16" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="HousePostIndex">House Post Code</label>
+        <div class="input-group">
+          <input id="hpIndex" class="form-control" placeholder="Post Index" required maxlength="10" readonly>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+  </div>
+</ng-template>
+
+<p>test</p>
+
+<form [formGroup]="houseReactiveForm" (ngSubmit)="onSubmitTest(houseReactiveForm)">
+
+  <input type="hidden" name="HId">
+  <label>
+    House Number:
+    <input type="number" formControlName="HouseNumber">
+  </label>
+
+  <label>
+    House City:
+    <input type="text" formControlName="HouseCity">
+  </label>
+  <label>
+    House Country:
+    <input type="text" formControlName="HouseCountry">
+  </label>
+  <label>
+    House Street:
+    <input type="text" formControlName="HouseStreet">
+  </label>
+  <label>
+    House Post Index:
+    <input type="text" formControlName="HousePostIndex">
+  </label>
+  <button type="submit" [disabled]="!houseReactiveForm.valid">Submit</button>
+</form>
+
+<p>
+  Form Value: {{ houseReactiveForm.value | json }}
+</p>
